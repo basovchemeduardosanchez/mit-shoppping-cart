@@ -101,26 +101,65 @@ const products = [
     // Fetch Data
     const addToCart = (e) => {
       let name = e.target.name;
+      // !! Filter returns an array
       let item = items.filter((item) => item.name == name);
+      // SECTION Check stock
+      // If we have run out of stock we just bail out of the function
+      if ( item[0].instock === 0 ) return;
+      // !SECTION Check stock
       console.log(`add to Cart ${JSON.stringify(item)}`);
       setCart([...cart, ...item]);
       //doFetch(query);
+      // SECTION Decrease stock
+      // Find the index of the item name in the items array
+      let itemIndex = items.findIndex((item) => item.name == name);
+      // Create a copy of the item
+      let newItem = { ...items[ itemIndex ] };
+      // Decrease the stock
+      newItem.instock -= 1;
+      // Create a copy of the items array
+      let newItems = [ ...items ];
+      // Set the index in the copy of the array to the copy of the item with the
+      // stock decreased
+      newItems[ itemIndex ] = newItem;
+      // Set the items to the modified items
+      setItems( newItems );
+      // !SECTION Decrease stock
     };
     const deleteCartItem = (index) => {
+      // SECTION Move back to items
+      let cartItem = cart[ index ];
+      let itemIndex = items.findIndex( item => item.name === cartItem.name );
+      let newItem = { ...items[ itemIndex ] };
+      newItem.instock += 1;
+      let newItems = [ ...items ];
+      newItems[ itemIndex ] = newItem;
+      setItems( newItems );
+      // !SECTION Move back to items
       let newCart = cart.filter((item, i) => index != i);
       setCart(newCart);
     };
     const photos = ["apple.png", "orange.png", "beans.png", "cabbage.png"];
   
     let list = items.map((item, index) => {
+      // SECTION
+      //let n = index + 1049;
+      //let url = "https://picsum.photos/id/" + n + "/50/50";
       let n = index + 1049;
       let url = "https://picsum.photos/id/" + n + "/70/70";
+      // !SECTION
   
       return (
         <li key={index}>
+          { /* SECTION */}
+          {/*<Image src={photos[index % 4]} width={70} roundedCircle></Image>*/}
           <Image src={url} width={70} roundedCircle></Image>
+          { /* !SECTION */}
           <Button variant="primary" size="large">
+            { /* SECTION */}
+            {/* {item.name}:{item.cost} */}
             {item.name}:{'$'}{item.cost}-Stock={item.instock}
+            { /* !SECTION */}
           </Button>
           <input name={item.name} type="submit" onClick={addToCart}></input>
         </li>
