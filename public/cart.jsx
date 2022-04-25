@@ -90,13 +90,20 @@ const products = [
     } = ReactBootstrap;
     //  Fetch Data
     const { Fragment, useState, useEffect, useReducer } = React;
-    const [query, setQuery] = useState("http://localhost:1337/products");
+    // SECTION Fix urls
+    //const [query, setQuery] = useState("http://localhost:1337/products");
+    //const [{ data, isLoading, isError }, doFetch] = useDataApi(
+    //  "http://localhost:1337/products",
+    //  {
+    //    data: [],
+    //  }
+    //);
+    const [query, setQuery] = useState("products");
     const [{ data, isLoading, isError }, doFetch] = useDataApi(
-      "http://localhost:1337/products",
-      {
-        data: [],
-      }
+        `http://localhost:1337/${ query }`,
+        []
     );
+    // !SECTION Fix urls
     console.log(`Rendering Products ${JSON.stringify(data)}`);
     // Fetch Data
     const addToCart = (e) => {
