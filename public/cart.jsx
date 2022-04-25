@@ -212,7 +212,24 @@ const products = [
       return newTotal;
     };
     // TODO: implement the restockProducts function
-    const restockProducts = (url) => {};
+    const restockProducts = (url) => {
+        // SECTION Restock
+        // Call the API
+        doFetch(url);
+        // Obtain the updated data and map it to only what we need
+        let newItems = data.map( ( { name, country, cost, instock } ) => ( { name, country, cost, instock } ) );
+        // The above is the short for
+        // let newItems = data.map( item => {
+        //     return {
+        //         name: item.name,
+        //         country: item.country,
+        //         cost: item.cost,
+        //         instock: item.instock
+        //     };
+        // } );
+        setItems( [ ...items, ...newItems ] );
+        // !SECTION Restock
+    };
   
     return (
       <Container>
